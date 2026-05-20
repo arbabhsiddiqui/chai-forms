@@ -8,6 +8,13 @@
       "when": 1779302089955,
       "tag": "0000_robust_smiling_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779303369767,
+      "tag": "0001_dazzling_azazel",
+      "breakpoints": true
     }
   ]
 }
