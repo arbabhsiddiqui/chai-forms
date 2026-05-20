@@ -1,0 +1,44 @@
+services:
+  chai_form_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chai_form_app
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+      # - pnpm-store:/pnpm/store
+      # - /app/node_modules
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@chai_form_postgres:5432/chai_form_db
+    depends_on:
+      - chai_form_postgres
+    networks:
+      - chai_form_network
+    command: tail -f /dev/null
+
+  chai_form_postgres:
+    image: postgres:15
+    restart: unless-stopped
+    container_name: chai_form_postgres
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: chai_form_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - chai_form_pg_data:/var/lib/postgresql/data
+    networks:
+      - chai_form_network
+
+networks:
+  chai_form_network:
+    driver: bridge
+
+volumes:
+  chai_form_pg_data:
