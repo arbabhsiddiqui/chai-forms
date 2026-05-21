@@ -13,3 +13,14 @@ export const createUserWithEmailAndPasswordInputModel = z.object({
 export const createUserWithEmailAndPasswordOutputModel = z.object({
     id: z.string().describe('id of the user created'),
 })
+
+export const signInUserWithEmailAndPasswordInputModel = z.object({
+    email: z.email().describe('The email address of the user.'),
+    password: z.string().describe('The password for the user account'),
+})
+
+
+
+export const signInUserWithEmailAndPasswordOutputModel = z.object({
+    id: z.string().describe('id of the user created'),
+})
