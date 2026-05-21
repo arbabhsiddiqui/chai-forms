@@ -13,6 +13,7 @@ import {
   FieldSeparator,
 } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
+import { useSignUp } from "~/hooks/api/auth"
 
 type SignupFormValues = {
   fullName: string
@@ -25,14 +26,18 @@ export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+
+
+  const { createUserWithEmailAndPasswordAsync, isError, isSuccess } = useSignUp()
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignupFormValues>()
 
-  const onSubmit = (data: SignupFormValues) => {
+  const onSubmit = async (data: SignupFormValues) => {
     console.log("Form Data:", data)
+    await createUserWithEmailAndPasswordAsync(data)
   }
 
   return (
@@ -111,9 +116,9 @@ export function SignupForm({
                       {...register("password", {
                         required: "Password is required",
                         minLength: {
-                          value: 8,
+                          value: 6,
                           message:
-                            "Password must be at least 8 characters",
+                            "Password must be at least 6 characters",
                         },
                       })}
                     />
