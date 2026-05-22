@@ -2,12 +2,24 @@
 
 import { useUser } from "~/hooks/api/auth";
 
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
-export default async function Home() {
+
+export default function Home() {
   // const { status } = await api.health.getHealth.query();
-
+  const router = useRouter();
   const { user } = useUser();
+
+  useEffect(() => {
+    if (user && user.id) {
+      router.replace("/dashboard")
+    } else {
+      router.replace("/login")
+    }
+  }, [user, router])
+
   return (
     <main className="min-h-screen min-w-screen flex justify-center items-center">
       <div>
