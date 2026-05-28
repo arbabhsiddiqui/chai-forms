@@ -13,7 +13,9 @@ import {
   FieldSeparator,
 } from "~/components/ui/field"
 import { Input } from "~/components/ui/input"
-import { useSignIn } from "~/hooks/api/auth"
+import { useSignIn, useUser } from "~/hooks/api/auth"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 type LoginFormValues = {
   email: string
@@ -30,7 +32,18 @@ export function LoginForm({
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>()
 
+  const router = useRouter();
+  const { user } = useUser();
   const { signInUserWithEmailAndPasswordAsync, isSuccess, isError } = useSignIn()
+
+
+  useEffect(() => {
+    if (user && user.id) {
+      router.replace("/admin")
+    } else {
+      router.replace("/login")
+    }
+  }, [user, router])
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
     console.log("Login Data:", data)

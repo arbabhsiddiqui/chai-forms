@@ -14,7 +14,7 @@ export default function Home() {
 
   useEffect(() => {
     if (user && user.id) {
-      router.replace("/dashboard")
+      router.replace("/admin")
     } else {
       router.replace("/login")
     }
