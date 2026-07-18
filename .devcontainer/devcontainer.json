@@ -1,18 +1,21 @@
 {
   "name": "Chai Form TRCP + Postgres Dev",
-  "remoteUser": "node",
+  "remoteUser": "root",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "chai_form_app",
   "workspaceFolder": "/app",
   "shutdownAction": "stopCompose",
   "overrideCommand": true,
+  "forwardPorts": [3000, 8000, 9229],
   "mounts": [
-    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached"
   ],
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
+  // Runs once after container is first created — installs all workspace deps
+  "postCreateCommand": "pnpm install",
   "customizations": {
     "vscode": {
       "extensions": [

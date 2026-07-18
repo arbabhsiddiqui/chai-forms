@@ -63,8 +63,7 @@ class UserService {
 
         const salt = randomBytes(16).toString('hex')
 
-        const hash = this.generateHash(salt, password)
-
+        const hash = await this.generateHash(salt, password)
 
         const userInsertResult = await db.insert(usersTable).values({ email, fullName, password: hash, salt }).returning({
             id: usersTable.id

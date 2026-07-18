@@ -33,7 +33,15 @@ export function SignupForm({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignupFormValues>()
+
+  } = useForm<SignupFormValues>({
+    defaultValues: {
+      "fullName": "demo",
+      "email": "demo@example.com",
+      "password": "123456789",
+      "confirmPassword": "123456789"
+    }
+  })
 
   const onSubmit = async (data: SignupFormValues) => {
     console.log("Form Data:", data)

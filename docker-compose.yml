@@ -1,40 +1,59 @@
 services:
+  # ── Main workspace container (Dev Container attaches here) ───────────────────
+  # command is kept as tail -f /dev/null so the Dev Container lifecycle
+  # controls startup. Run `pnpm run dev` from the VS Code terminal or
+  # use "🚀 Full Stack (watch + debug)" from the Run & Debug panel.
   chai_form_app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: chai_form_app
     ports:
-      - "4000:4000"
+      - "3000:3000"
+      - "8000:8000"
+      # Node.js inspector port for VS Code debugger
+      - "9229:9229"
     volumes:
       - .:/app
-      # - pnpm-store:/pnpm/store
-      # - /app/node_modules
+      # Isolate node_modules inside the container so host OS differences
+      # (e.g. native bindings on Linux vs macOS) never bleed through
+      - /app/node_modules
+      - /app/apps/api/node_modules
+      - /app/apps/web/node_modules
     environment:
       DATABASE_URL: postgres://postgres:postgres@chai_form_postgres:5432/chai_form_db
+      PORT: 8000
+      # Enable tsx watch polling — needed when host filesystem events
+      # don't propagate into Docker (common on Windows/WSL2 + macOS)
+      CHOKIDAR_USEPOLLING: "true"
+      TSX_WATCH_POLL: "true"
     depends_on:
-      - chai_form_postgres
+      chai_form_postgres:
+        condition: service_healthy
     networks:
       - chai_form_network
     command: tail -f /dev/null
 
+  # ── PostgreSQL ────────────────────────────────────────────────────────────────
   chai_form_postgres:
     image: postgres:15
     restart: unless-stopped
     container_name: chai_form_postgres
-
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: chai_form_db
-
     ports:
       - "5432:5432"
-
     volumes:
       - chai_form_pg_data:/var/lib/postgresql/data
     networks:
       - chai_form_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 networks:
   chai_form_network:

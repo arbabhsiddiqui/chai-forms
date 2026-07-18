@@ -1,0 +1,61 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Single-run debug (no watch). Use for stepping through complex flows.
+      "name": "Debug API",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/apps/api",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--import", "tsx", "--inspect=0.0.0.0:9229"],
+      "program": "${workspaceFolder}/apps/api/src/index.ts",
+      "envFile": "${workspaceFolder}/apps/api/.env",
+      "env": {
+        "PORT": "8000"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      // Watch mode: restarts on file save, debugger re-attaches automatically.
+      "name": "Debug API (watch)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/apps/api",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--import", "tsx", "--watch", "--inspect=0.0.0.0:9229"],
+      "program": "${workspaceFolder}/apps/api/src/index.ts",
+      "envFile": "${workspaceFolder}/apps/api/.env",
+      "env": {
+        "PORT": "8000"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"],
+      "restart": true
+    },
+    {
+      "name": "Debug Web (Next.js)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/apps/web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["run", "dev"],
+      "envFile": "${workspaceFolder}/apps/web/.env",
+      "env": {
+        "PORT": "3000"
+      },
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "🚀 Full Stack (watch + debug)",
+      "configurations": ["Debug API (watch)", "Debug Web (Next.js)"]
+    }
+  ]
+}
