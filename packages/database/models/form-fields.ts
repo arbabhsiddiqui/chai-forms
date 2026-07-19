@@ -10,7 +10,7 @@ import {
     unique
 } from "drizzle-orm/pg-core";
 import { formsTable } from "../schema";
-import { desc, placeholder } from "drizzle-orm";
+
 
 
 
@@ -25,6 +25,7 @@ export const formsFieldsTable = pgTable("form-fields", {
     placeholder: text("placeholder"),
     isRequired: boolean("is_required").default(false).notNull(),
     index: numeric('index', { scale: 2 }).notNull(),
+    type: fieldTypeEnm("type").notNull(),
 
 
     formId: uuid("form_id").references(() => formsTable.id).notNull(),
